@@ -19,20 +19,29 @@ class Audio {
 			'A#': 466.2,
 			'B': 493.9,
 			'C2': 523.3,
+			'C#2': 554.4,
+			'D2': 587.4,
+			'D#2': 622.4,
+			'E2': 659.4
 		};
 
 		this.oscs = [];
 	}
 
 
+	/**
+	 * 音鳴らす
+	 */
 	startNote(noteId) {
 		if (!noteId) return;
 
+		// オシレーター作る
 		var osc = this.ctx.createOscillator();
 		osc.frequency.value = this.note[noteId];
 
+		// gain node
 		var gain = this.ctx.createGain();
-		gain.gain.value = 0.3;
+		gain.gain.value = 0.2;
 
 		osc.connect(gain);
 		gain.connect(this.ctx.destination);
@@ -44,6 +53,9 @@ class Audio {
 		});
 	}
 
+	/**
+	 * おと止める
+	 */
 	stopNote(noteId) {
 		this.oscs.forEach((osc, i, oscs) => {
 			if (osc.note === noteId) {
