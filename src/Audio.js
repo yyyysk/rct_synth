@@ -4,7 +4,7 @@ class Audio {
 		window.AudioContext = window.AudioContext || window.webkitAudioContext;
 		this.ctx = new AudioContext();
 		this.ctx.createGain = this.ctx.createGain || this.ctx.createGainNode;
-
+		// 各ピッチの周波数
 		this.note = {
 			'C': 261.6,
 			'C#': 277.2,
@@ -24,8 +24,10 @@ class Audio {
 			'D#2': 622.4,
 			'E2': 659.4
 		};
-
+		// オシレーターとエンベロープフィルタの保持用
 		this.oscs = [];
+		// 0.001未満で音を止める
+		this.VALUE_OF_STOP = 1e-3;
 	}
 
 
@@ -36,20 +38,44 @@ class Audio {
 		if (!noteId) return;
 
 		// オシレーター作る
-		var osc = this.ctx.createOscillator();
+		const osc = this.ctx.createOscillator();
 		osc.frequency.value = this.note[noteId];
 
-		// gain node
-		var gain = this.ctx.createGain();
-		gain.gain.value = 0.2;
+		// gain node -> Envelope
+		const gain = this.ctx.createGain();
+		// Envelopeで処理するため
+		// gain.gain.value = 0.2;
 
 		osc.connect(gain);
 		gain.connect(this.ctx.destination);
+		
 		osc.start();
+
+		// エンベロープを作成(初期化)
+		// 音源スタート時にgainを0に設定する
+		const t0 = this.ctx.currentTime;
+		gain.gain.setValueAtTime(0, t0);
+
+		// Attackの処理
+		// attack timeでgainが1になるように設定
+		const attackTime = 1;
+		const attackValue = 1;
+		const t1 = t0 * attackTime;
+		gain.gain.linearRampToValueAtTime(attackValue, t1);
+		
+		// レガシーブラウザ対応
+		gain.gain.setTargetAtTime = gain.gain.setTargetAtTime ||
+                              gain.gain.setTargetValueAtTime;
+		// Decay (Attackの最大値からSustainに衰退するまでの時間)
+		// Sustain 維持する音量(Gain.gain.value)
+		const decayTime = 1;
+		const sustainValue = 0.2;
+		gain.gain.setTargetAtTime(sustainValue, t1, decayTime);
 
 		this.oscs.push({
 			note: noteId,
-			osc: osc
+			osc: osc,
+			gain: gain
 		});
 	}
 
@@ -57,10 +83,24 @@ class Audio {
 	 * おと止める
 	 */
 	stopNote(noteId) {
-		this.oscs.forEach((osc, i, oscs) => {
+		// キーアップした音のoscを特定する
+		this.oscs.some((osc, i, oscs) => {
 			if (osc.note === noteId) {
-				osc.osc.stop();
-				oscs.splice(i, 1);
+				// Release
+				const t3 = this.ctx.currentTime;
+				const releaseTime = 0.5;
+				osc.gain.gain.setTargetAtTime(0, t3, releaseTime);
+
+				// 0.001未満になったら音を止める
+				let intervalId;
+				intervalId = window.setInterval(function() {
+					osc.osc.stop();
+					// 配列から削除
+          oscs.splice(i, 1);
+				},0);
+
+				// breakの代わり
+				// return true;
 			}
 		});
 	}
