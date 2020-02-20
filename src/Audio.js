@@ -1,6 +1,6 @@
 class Audio {
 
-	constructor() {
+	constructor(envelope) {
 		window.AudioContext = window.AudioContext || window.webkitAudioContext;
 		this.ctx = new AudioContext();
 		this.ctx.createGain = this.ctx.createGain || this.ctx.createGainNode;
@@ -28,8 +28,13 @@ class Audio {
 		this.oscs = [];
 		// 0.001未満で音を止める
 		this.VALUE_OF_STOP = 1e-3;
+
+		this._envelope = envelope;
 	}
 
+	setEnvelope(envelope) {
+		this._envelope = envelope;	
+	}
 
 	/**
 	 * 音鳴らす
@@ -58,19 +63,16 @@ class Audio {
 
 		// Attackの処理
 		// attack timeでgainが1になるように設定
-		const attackTime = 1;
-		const attackValue = 1;
-		const t1 = t0 * attackTime;
-		gain.gain.linearRampToValueAtTime(attackValue, t1);
+		const t1 = parseFloat(t0 + this._envelope.attackTime); 
+		console.log(t1);
+		gain.gain.linearRampToValueAtTime(this._envelope.attackValue, t1);
 		
 		// レガシーブラウザ対応
 		gain.gain.setTargetAtTime = gain.gain.setTargetAtTime ||
                               gain.gain.setTargetValueAtTime;
 		// Decay (Attackの最大値からSustainに衰退するまでの時間)
 		// Sustain 維持する音量(Gain.gain.value)
-		const decayTime = 1;
-		const sustainValue = 0.2;
-		gain.gain.setTargetAtTime(sustainValue, t1, decayTime);
+		gain.gain.setTargetAtTime(this._envelope.sustain, t1, this._envelope.decay);
 
 		this.oscs.push({
 			note: noteId,
@@ -88,10 +90,9 @@ class Audio {
 			if (osc.note === noteId) {
 				// Release
 				const t3 = this.ctx.currentTime;
-				const releaseTime = 0.2;
 				// AttackとDecayの処理をキャンセル
 				osc.gain.gain.cancelScheduledValues(t3);
-				osc.gain.gain.setTargetAtTime(0, t3, releaseTime);
+				osc.gain.gain.setTargetAtTime(0, t3, this._envelope.release);
 
 				// 0.001未満になったら音を止める
 				let intervalId;

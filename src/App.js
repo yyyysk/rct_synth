@@ -1,28 +1,57 @@
 import React from 'react';
-import { listen } from './Listner';
+
+// UI components
+import EnvelopeFilter from './components/EnvelopeFilter';
+
+// Functions
+import { listen, reset } from './Listner';
 import Audio from './Audio';
 
-function App() {
+class App extends React.Component {
 
-	const audio = new Audio();
-	listen(audio);
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	constructor() {
+		super();
+		this.state = {
+			envelope: {
+				attackTime: 0,
+				attackValue: 0,
+				decay: 0,
+				sustain: 0,
+				release: 0
+			}
+		};
+
+		this.audio = this.audio? this.audio : new Audio();
+		this.audio.setEnvelope(this.state.envelope);
+		if (!this.isListening) this.isListening = listen(this.audio);
+	}
+
+	_updateEnvelope(name, value) {
+		const source = {};
+		source[name] = value;
+
+		const newEnv = Object.assign(
+			this.state.envelope, 
+			source			
+		);
+		this.setState({envelope: newEnv});
+	}
+	
+	componentDidUpdate() {
+		this.audio.setEnvelope(this.state.envelope);
+	}
+
+	render() {
+		console.log(this.state);
+		return (
+			<div className="App">
+			<EnvelopeFilter 
+				updateEnvelope={(name, value) => this._updateEnvelope(name, value)} 
+				envelope={this.state.envelope}/>
+			</div>
+		);
+	}
 }
 
 export default App;
+
