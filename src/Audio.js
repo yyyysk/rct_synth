@@ -29,9 +29,22 @@ class Audio {
 		// 0.001未満で音を止める
 		this.VALUE_OF_STOP = 1e-3;
 
+		// evnelope filter
 		this._envelope = envelope;
+		// 波形
+		this._wave = 'sine';
 	}
 
+	/**
+	 * waveのセッター
+	 */
+	setWave(wave) {
+		this._wave = wave;
+	}
+
+	/**
+	 * Envelopeのセッター
+	 */
 	setEnvelope(envelope) {
 		this._envelope = envelope;	
 	}
@@ -44,6 +57,9 @@ class Audio {
 
 		// オシレーター作る
 		const osc = this.ctx.createOscillator();
+		// 波形
+		osc.type = this._wave;
+		console.log(osc.type);
 		osc.frequency.value = this.note[noteId];
 
 		// gain node -> Envelope

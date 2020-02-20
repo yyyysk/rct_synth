@@ -2,6 +2,7 @@ import React from 'react';
 
 // UI components
 import EnvelopeFilter from './components/EnvelopeFilter';
+import Wave from './components/Wave';
 
 // Functions
 import { listen, reset } from './Listner';
@@ -12,6 +13,7 @@ class App extends React.Component {
 	constructor() {
 		super();
 		this.state = {
+			wave: 'sine',
 			envelope: {
 				attackTime: 0,
 				attackValue: 0,
@@ -21,11 +23,22 @@ class App extends React.Component {
 			}
 		};
 
+		// AudioContextの初期化
 		this.audio = this.audio? this.audio : new Audio();
 		this.audio.setEnvelope(this.state.envelope);
 		if (!this.isListening) this.isListening = listen(this.audio);
 	}
 
+	/**
+	 * Wave更新
+	 */
+	_updateWave(wave) {
+		this.setState({ wave: wave });
+	}
+
+	/**
+	 * Envelope更新
+	 */
 	_updateEnvelope(name, value) {
 		const source = {};
 		source[name] = value;
@@ -37,7 +50,12 @@ class App extends React.Component {
 		this.setState({envelope: newEnv});
 	}
 	
+	/**
+	 * Reactライフサイクル
+	 * stateかpropsがupdateされたタイミング
+	 */
 	componentDidUpdate() {
+		this.audio.setWave(this.state.wave);
 		this.audio.setEnvelope(this.state.envelope);
 	}
 
@@ -45,9 +63,10 @@ class App extends React.Component {
 		console.log(this.state);
 		return (
 			<div className="App">
-			<EnvelopeFilter 
-				updateEnvelope={(name, value) => this._updateEnvelope(name, value)} 
-				envelope={this.state.envelope}/>
+				<Wave updateWave = {(wave) => this._updateWave(wave)} />
+				<EnvelopeFilter 
+					updateEnvelope={(name, value) => this._updateEnvelope(name, value)} 
+					envelope={this.state.envelope}/>
 			</div>
 		);
 	}
