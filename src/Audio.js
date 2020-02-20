@@ -88,15 +88,24 @@ class Audio {
 			if (osc.note === noteId) {
 				// Release
 				const t3 = this.ctx.currentTime;
-				const releaseTime = 0.5;
+				const releaseTime = 0.2;
+				// AttackとDecayの処理をキャンセル
+				osc.gain.gain.cancelScheduledValues(t3);
 				osc.gain.gain.setTargetAtTime(0, t3, releaseTime);
 
 				// 0.001未満になったら音を止める
 				let intervalId;
 				intervalId = window.setInterval(function() {
-					osc.osc.stop();
-					// 配列から削除
-          oscs.splice(i, 1);
+					if (osc.gain.gain.value < this.VALUE_OF_STOP) {
+						osc.osc.stop();
+						// 配列から削除
+          	oscs.splice(i, 1);
+
+						if (intervalId !== null) {
+							window.clearInterval(intervalId);
+							intervalId = null;
+						}
+					}
 				},0);
 
 				// breakの代わり
