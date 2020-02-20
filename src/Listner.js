@@ -25,10 +25,11 @@ const _getNote = (keyCode) => {
 	}
 }
 
+let _onKeyUp = {};
 /**
  * keydown
  */
-const _setOnKeyDown = (audio) => {
+const _setOnKeyDown = function(audio) {
 	window.addEventListener('keydown', downEv => {
 		// 押しっぱなしで発火したら処理しない
 		if (downEv.repeat === true) return;
@@ -36,19 +37,24 @@ const _setOnKeyDown = (audio) => {
 		let note = _getNote(downEv.keyCode);
 		audio.startNote(note);
 
-		document.addEventListener('keyup', onKeyUp);
+		document.addEventListener('keyup', _onKeyUp);
 
 		// key up
-		function onKeyUp(upEv) {
+		_onKeyUp = function(upEv) {
 			if (upEv.keyCode !== downEv.keyCode) return;
 
 			audio.stopNote(note);
-			document.removeEventListener('keyup', onKeyUp);
+			document.removeEventListener('keyup', _onKeyUp);
 		}
 	});
 };
 
 export const listen = (audio) => {
 	_setOnKeyDown(audio);
+}
+
+export const reset = () => {
+	window.removeEventListener('keydown', _setOnKeyDown);
+	window.removeEventListener('keyup', _onKeyUp);
 }
 
