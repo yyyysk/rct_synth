@@ -2,7 +2,6 @@
  * KeyCodeを音名にかえる
  */
 const _getNote = (keyCode) => {
-	console.log(keyCode);
 	switch(keyCode) {
 		case 65: return 'C';
 		case 87: return 'C#';
@@ -25,11 +24,10 @@ const _getNote = (keyCode) => {
 	}
 }
 
-let _onKeyUp = {};
 /**
  * keydown
  */
-const _setOnKeyDown = function(audio) {
+const _setOnKeyDown =	(audio) =>  {
 	window.addEventListener('keydown', downEv => {
 		// 押しっぱなしで発火したら処理しない
 		if (downEv.repeat === true) return;
@@ -37,24 +35,25 @@ const _setOnKeyDown = function(audio) {
 		let note = _getNote(downEv.keyCode);
 		audio.startNote(note);
 
-		document.addEventListener('keyup', _onKeyUp);
-
 		// key up
-		_onKeyUp = function(upEv) {
+		const _onKeyUp = (upEv) => {
 			if (upEv.keyCode !== downEv.keyCode) return;
 
 			audio.stopNote(note);
 			document.removeEventListener('keyup', _onKeyUp);
 		}
+
+		document.addEventListener('keyup', _onKeyUp);
 	});
 };
 
 export const listen = (audio) => {
 	_setOnKeyDown(audio);
+	return true;
 }
 
-export const reset = () => {
-	window.removeEventListener('keydown', _setOnKeyDown);
-	window.removeEventListener('keyup', _onKeyUp);
-}
+//export const reset = () => {
+//	window.removeEventListener('keydown', _setOnKeyDown);
+//	window.removeEventListener('keyup', _onKeyUp);
+//}
 

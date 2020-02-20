@@ -20,7 +20,7 @@ class EnvelopeFilter extends React.Component {
 						id="attackTime" 
 						name="attackTime"
 						type="range" 
-						max="20" 
+						max="3" 
 						min="0" 
 						step="0.1" 
 						value={this.props.envelope.attackTime}
@@ -48,7 +48,7 @@ class EnvelopeFilter extends React.Component {
 						id="decay" 
 						name="decay"
 						type="range" 
-						max="20" 
+						max="1" 
 						min="0" 
 						step="0.1" 
 						value={this.props.envelope.decay}
@@ -76,7 +76,7 @@ class EnvelopeFilter extends React.Component {
 						id="release" 
 						name="release"
 						type="range" 
-						max="20" 
+						max="1" 
 						min="0" 
 						step="0.1" 
 						value={this.props.envelope.release}

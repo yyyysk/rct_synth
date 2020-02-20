@@ -21,8 +21,9 @@ class App extends React.Component {
 			}
 		};
 
-		this.audio = new Audio();
-		listen(this.audio);
+		this.audio = this.audio? this.audio : new Audio();
+		this.audio.setEnvelope(this.state.envelope);
+		if (!this.isListening) this.isListening = listen(this.audio);
 	}
 
 	_updateEnvelope(name, value) {
@@ -37,7 +38,7 @@ class App extends React.Component {
 	}
 	
 	componentDidUpdate() {
-		this.audio = new Audio();
+		this.audio.setEnvelope(this.state.envelope);
 	}
 
 	render() {
