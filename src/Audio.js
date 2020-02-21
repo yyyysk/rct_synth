@@ -1,6 +1,6 @@
 class Audio {
 
-	constructor(envelope, delay) {
+	constructor(envelope, delay, chorus) {
 		window.AudioContext = window.AudioContext || window.webkitAudioContext;
 		this.ctx = new AudioContext();
 		this.ctx.createGain = this.ctx.createGain || this.ctx.createGainNode;
@@ -35,6 +35,8 @@ class Audio {
 		this._wave = 'sine';
 		// Delayのパラメータ
 		this._delay = delay;
+		// Chorusのパラメータ
+		this._chorus = chorus;
 	}
 
 	/**
@@ -56,6 +58,13 @@ class Audio {
 	 */
 	setDelay(delay) {
 		this._delay = delay;
+	}
+
+	/**
+	 * Chorusのセッター
+	 */
+	setChorus(chorus) {
+		this._chorus = chorus;
 	}
 
 	/**
@@ -121,21 +130,16 @@ class Audio {
 		delay.connect(feedback);
 		feedback.connect(delay);
 
-		// Chorusへ接続
-		//osc.connect(chorus);
-		//chorus.connect(chorusMix);
-		//chorusMix.connect(this.ctx.destination);
-
 		// ChorusのLFOをdepthと接続
 		chorusLFO.connect(chorusDepth);
 		chorusDepth.connect(chorus.delayTime);
 		
 		// chorusのパラメータ
-		const depthRate = 1;
-		chorus.delayTime.value = 0.020;
+		const depthRate = this._chorus.rate;
+		chorus.delayTime.value = this._chorus.time;
 		chorusDepth.gain.value = chorus.delayTime.value * depthRate;
-		chorusLFO.frequency.value = 0.3;
-		chorusMix.gain.value = 0.5;
+		chorusLFO.frequency.value = this._chorus.frequency;
+		chorusMix.gain.value = this._chorus.mix;
 
 		// start sound
 		osc.start(0);
