@@ -62,16 +62,71 @@ class Audio {
 		console.log(osc.type);
 		osc.frequency.value = this.note[noteId];
 
-		// gain node -> Envelope
+		// EnvelopeFilter用のGainNode
 		const gain = this.ctx.createGain();
-		// Envelopeで処理するため
-		// gain.gain.value = 0.2;
 
-		osc.connect(gain);
+		/**
+		 * ========================
+		 * 				DELAY!!!!
+		 * =======================
+		 */
+		const MAX_DELAY_TIME = 1;
+		const delay = this.ctx.createDelay(MAX_DELAY_TIME);
+		const dry = this.ctx.createGain(); // 原音用
+		const wet = this.ctx.createGain(); // ディレイサウンド用
+		const feedback = this.ctx.createGain(); // FB用
+
+		// ディレイのパラメータ
+		delay.delayTime.value = 0.3;
+		dry.gain.value = 0.7;
+		wet.gain.value = 0.3;
+		feedback.gain.value = 0.5;
+
+		// OscillatorNode (Input) -> GainNode (Dry) -> AudioDestinationNode (Output)
+		// osc.connect(dry);
+		// osc.connect(this.ctx.destination);
+
+		// OscillatorNode (Input) -> DelayNode (Delay) -> GainNode (Wet) -> AudioDestinationNode (Output)
+		// osc.connect(delay);
+		// delay.connect(wet);
+		// wet.connect(this.ctx.destination);
+
+		// ディレイをFBにつなぐ
+		// delay.connect(feedback);
+		// feedback.connect(delay);
+
+		/**
+		 * 原音側
+		 */
+		osc.connect(dry);
+		// Enveloprgenerator
+		dry.connect(gain);
 		gain.connect(this.ctx.destination);
-		
-		osc.start();
 
+		// ディレイの原音側に接続(dry)
+		gain.connect(delay);
+		delay.connect(wet);
+		wet.connect(this.ctx.destination);
+
+		// Feedback
+		delay.connect(feedback);
+		feedback.connect(delay);
+
+		/*
+		 * Delayのwet側
+		 */
+		//osc.connect(delay);
+		//delay.connect(wet);
+		//wet.connect(this.ctx.destination);
+		
+		osc.start(0);
+
+
+		/**
+		 * ======================
+		 * 			Envelope!!!
+		 * =====================
+		 */
 		// エンベロープを作成(初期化)
 		// 音源スタート時にgainを0に設定する
 		const t0 = this.ctx.currentTime;
@@ -89,6 +144,7 @@ class Audio {
 		// Decay (Attackの最大値からSustainに衰退するまでの時間)
 		// Sustain 維持する音量(Gain.gain.value)
 		gain.gain.setTargetAtTime(this._envelope.sustain, t1, this._envelope.decay);
+		
 
 		this.oscs.push({
 			note: noteId,
