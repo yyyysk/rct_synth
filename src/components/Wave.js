@@ -13,8 +13,8 @@ class Wave extends React.Component {
 	render() {
 		return(
 			<div>
-				<select name="wave" onChange={e => this.onSelectChange(e)}>
-					<option value="sine" selected>sine</option>
+				<select name="wave" value="sine" onChange={e => this.onSelectChange(e)}>
+					<option value="sine">sine</option>
 					<option value="square">square</option>
 					<option value="sawtooth">sawtooth</option>
 					<option value="triangle">triangle</option>

@@ -1,6 +1,6 @@
 class Audio {
 
-	constructor(envelope) {
+	constructor(envelope, delay) {
 		window.AudioContext = window.AudioContext || window.webkitAudioContext;
 		this.ctx = new AudioContext();
 		this.ctx.createGain = this.ctx.createGain || this.ctx.createGainNode;
@@ -33,6 +33,8 @@ class Audio {
 		this._envelope = envelope;
 		// 波形
 		this._wave = 'sine';
+		// Delayのパラメータ
+		this._delay = delay;
 	}
 
 	/**
@@ -47,6 +49,13 @@ class Audio {
 	 */
 	setEnvelope(envelope) {
 		this._envelope = envelope;	
+	}
+
+	/**
+	 * Delayのセッター
+	 */
+	setDelay(delay) {
+		this._delay = delay;
 	}
 
 	/**
@@ -70,55 +79,37 @@ class Audio {
 		 * 				DELAY!!!!
 		 * =======================
 		 */
-		const MAX_DELAY_TIME = 1;
+		const MAX_DELAY_TIME = 2;
 		const delay = this.ctx.createDelay(MAX_DELAY_TIME);
 		const dry = this.ctx.createGain(); // 原音用
 		const wet = this.ctx.createGain(); // ディレイサウンド用
 		const feedback = this.ctx.createGain(); // FB用
 
 		// ディレイのパラメータ
-		delay.delayTime.value = 0.3;
-		dry.gain.value = 0.7;
-		wet.gain.value = 0.3;
-		feedback.gain.value = 0.5;
-
-		// OscillatorNode (Input) -> GainNode (Dry) -> AudioDestinationNode (Output)
-		// osc.connect(dry);
-		// osc.connect(this.ctx.destination);
-
-		// OscillatorNode (Input) -> DelayNode (Delay) -> GainNode (Wet) -> AudioDestinationNode (Output)
-		// osc.connect(delay);
-		// delay.connect(wet);
-		// wet.connect(this.ctx.destination);
-
-		// ディレイをFBにつなぐ
-		// delay.connect(feedback);
-		// feedback.connect(delay);
+		delay.delayTime.value = this._delay.delayTime;
+		dry.gain.value = this._delay.dry;
+		wet.gain.value = this._delay.wet;
+		feedback.gain.value = this._delay.feedback;
 
 		/**
 		 * 原音側
 		 */
+		// dryへの接続
 		osc.connect(dry);
-		// Enveloprgenerator
+		// Enveloprgeneratorに接続
 		dry.connect(gain);
+		// Dryを出力
 		gain.connect(this.ctx.destination);
 
-		// ディレイの原音側に接続(dry)
+		// ディレイEffect用の出力を接続
 		gain.connect(delay);
 		delay.connect(wet);
 		wet.connect(this.ctx.destination);
 
-		// Feedback
+		// Feedbackを接続
 		delay.connect(feedback);
 		feedback.connect(delay);
 
-		/*
-		 * Delayのwet側
-		 */
-		//osc.connect(delay);
-		//delay.connect(wet);
-		//wet.connect(this.ctx.destination);
-		
 		osc.start(0);
 
 
