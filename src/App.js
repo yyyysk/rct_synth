@@ -36,6 +36,7 @@ class App extends React.Component {
 		// AudioContextの初期化
 		this.audio = this.audio? this.audio : new Audio();
 		this.audio.setEnvelope(this.state.envelope);
+		this.audio.setDelay(this.state.delay);
 		if (!this.isListening) this.isListening = listen(this.audio);
 	}
 

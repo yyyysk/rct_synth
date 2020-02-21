@@ -75,6 +75,16 @@ class Audio {
 		const gain = this.ctx.createGain();
 
 		/**
+		 * =======================
+		 * 				CHORUS!!!
+		 * =======================
+		 */
+		const chorus = this.ctx.createDelay();
+		const chorusLFO = this.ctx.createOscillator();
+		const chorusDepth= this.ctx.createGain(); // LFO用のGainnode
+		const chorusMix = this.ctx.createGain();
+
+		/**
 		 * ========================
 		 * 				DELAY!!!!
 		 * =======================
@@ -91,11 +101,12 @@ class Audio {
 		wet.gain.value = this._delay.wet;
 		feedback.gain.value = this._delay.feedback;
 
-		/**
-		 * 原音側
-		 */
-		// dryへの接続
-		osc.connect(dry);
+		// chorusへ接続
+		osc.connect(chorus);
+		// chorusMixへ接続
+		chorus.connect(chorusMix);
+		// Delayのdryへの接続
+		chorusMix.connect(dry);
 		// Enveloprgeneratorに接続
 		dry.connect(gain);
 		// Dryを出力
@@ -110,8 +121,26 @@ class Audio {
 		delay.connect(feedback);
 		feedback.connect(delay);
 
-		osc.start(0);
+		// Chorusへ接続
+		//osc.connect(chorus);
+		//chorus.connect(chorusMix);
+		//chorusMix.connect(this.ctx.destination);
 
+		// ChorusのLFOをdepthと接続
+		chorusLFO.connect(chorusDepth);
+		chorusDepth.connect(chorus.delayTime);
+		
+		// chorusのパラメータ
+		const depthRate = 1;
+		chorus.delayTime.value = 0.020;
+		chorusDepth.gain.value = chorus.delayTime.value * depthRate;
+		chorusLFO.frequency.value = 0.3;
+		chorusMix.gain.value = 0.5;
+
+		// start sound
+		osc.start(0);
+		// chorsu start
+		chorusLFO.start(0);
 
 		/**
 		 * ======================
