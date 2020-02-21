@@ -1,6 +1,6 @@
 class Audio {
 
-	constructor(envelope, delay) {
+	constructor(envelope, delay, chorus) {
 		window.AudioContext = window.AudioContext || window.webkitAudioContext;
 		this.ctx = new AudioContext();
 		this.ctx.createGain = this.ctx.createGain || this.ctx.createGainNode;
@@ -35,6 +35,8 @@ class Audio {
 		this._wave = 'sine';
 		// Delayのパラメータ
 		this._delay = delay;
+		// Chorusのパラメータ
+		this._chorus = chorus;
 	}
 
 	/**
@@ -59,6 +61,13 @@ class Audio {
 	}
 
 	/**
+	 * Chorusのセッター
+	 */
+	setChorus(chorus) {
+		this._chorus = chorus;
+	}
+
+	/**
 	 * 音鳴らす
 	 */
 	startNote(noteId) {
@@ -73,6 +82,16 @@ class Audio {
 
 		// EnvelopeFilter用のGainNode
 		const gain = this.ctx.createGain();
+
+		/**
+		 * =======================
+		 * 				CHORUS!!!
+		 * =======================
+		 */
+		const chorus = this.ctx.createDelay();
+		const chorusLFO = this.ctx.createOscillator();
+		const chorusDepth= this.ctx.createGain(); // LFO用のGainnode
+		const chorusMix = this.ctx.createGain();
 
 		/**
 		 * ========================
@@ -91,11 +110,12 @@ class Audio {
 		wet.gain.value = this._delay.wet;
 		feedback.gain.value = this._delay.feedback;
 
-		/**
-		 * 原音側
-		 */
-		// dryへの接続
-		osc.connect(dry);
+		// chorusへ接続
+		osc.connect(chorus);
+		// chorusMixへ接続
+		chorus.connect(chorusMix);
+		// Delayのdryへの接続
+		chorusMix.connect(dry);
 		// Enveloprgeneratorに接続
 		dry.connect(gain);
 		// Dryを出力
@@ -110,8 +130,21 @@ class Audio {
 		delay.connect(feedback);
 		feedback.connect(delay);
 
-		osc.start(0);
+		// ChorusのLFOをdepthと接続
+		chorusLFO.connect(chorusDepth);
+		chorusDepth.connect(chorus.delayTime);
+		
+		// chorusのパラメータ
+		const depthRate = this._chorus.rate;
+		chorus.delayTime.value = this._chorus.time;
+		chorusDepth.gain.value = chorus.delayTime.value * depthRate;
+		chorusLFO.frequency.value = this._chorus.frequency;
+		chorusMix.gain.value = this._chorus.mix;
 
+		// start sound
+		osc.start(0);
+		// chorsu start
+		chorusLFO.start(0);
 
 		/**
 		 * ======================
