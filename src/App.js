@@ -3,6 +3,7 @@ import React from 'react';
 // UI components
 import EnvelopeFilter from './components/EnvelopeFilter';
 import Wave from './components/Wave';
+import Delay from './components/Delay';
 
 // Functions
 import { listen, reset } from './Listner';
@@ -13,13 +14,22 @@ class App extends React.Component {
 	constructor() {
 		super();
 		this.state = {
+			// 波形
 			wave: 'sine',
+			// エンベロープ
 			envelope: {
 				attackTime: 0,
 				attackValue: 0,
 				decay: 0,
 				sustain: 0,
 				release: 0
+			},
+			// Delay
+			delay: {
+				delayTime: 1,
+				dry: 1,
+				wet: 0,
+				feedback: 0,
 			}
 		};
 
@@ -49,6 +59,20 @@ class App extends React.Component {
 		);
 		this.setState({envelope: newEnv});
 	}
+
+	/**
+	 * Delay更新
+	 */
+	_updateDelay(name, value) {
+		const source = {};
+		source[name] = value;
+
+		const newDelay = Object.assign(
+			this.state.delay,
+			source
+		);
+		this.setState({ delay: newDelay });
+	}
 	
 	/**
 	 * Reactライフサイクル
@@ -57,6 +81,7 @@ class App extends React.Component {
 	componentDidUpdate() {
 		this.audio.setWave(this.state.wave);
 		this.audio.setEnvelope(this.state.envelope);
+		this.audio.setDelay(this.state.delay);
 	}
 
 	render() {
@@ -67,6 +92,9 @@ class App extends React.Component {
 				<EnvelopeFilter 
 					updateEnvelope={(name, value) => this._updateEnvelope(name, value)} 
 					envelope={this.state.envelope}/>
+				<Delay
+					delay={this.state.delay} 
+					updateDelay={(name, value) => this._updateDelay(name, value)} />
 			</div>
 		);
 	}
