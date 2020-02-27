@@ -1,3 +1,8 @@
+import Envelope from './envelope';
+
+/**
+ * 音源の生成クラス
+ */
 class Audio {
 
 	constructor(envelope, delay, chorus) {
@@ -77,11 +82,10 @@ class Audio {
 		const osc = this.ctx.createOscillator();
 		// 波形
 		osc.type = this._wave;
-		console.log(osc.type);
 		osc.frequency.value = this.note[noteId];
 
 		// EnvelopeFilter用のGainNode
-		const gain = this.ctx.createGain();
+		const eg = new Envelope(this.ctx, this._envelope);
 
 		/**
 		 * =======================
@@ -117,12 +121,12 @@ class Audio {
 		// Delayのdryへの接続
 		chorusMix.connect(dry);
 		// Enveloprgeneratorに接続
-		dry.connect(gain);
+		dry.connect(eg.getNode());
 		// Dryを出力
-		gain.connect(this.ctx.destination);
+		eg.getNode().connect(this.ctx.destination);
 
 		// ディレイEffect用の出力を接続
-		gain.connect(delay);
+		eg.getNode().connect(delay);
 		delay.connect(wet);
 		wet.connect(this.ctx.destination);
 
@@ -146,34 +150,13 @@ class Audio {
 		// chorsu start
 		chorusLFO.start(0);
 
-		/**
-		 * ======================
-		 * 			Envelope!!!
-		 * =====================
-		 */
-		// エンベロープを作成(初期化)
-		// 音源スタート時にgainを0に設定する
-		const t0 = this.ctx.currentTime;
-		gain.gain.setValueAtTime(0, t0);
-
-		// Attackの処理
-		// attack timeでgainが1になるように設定
-		const t1 = parseFloat(t0 + this._envelope.attackTime); 
-		console.log(t1);
-		gain.gain.linearRampToValueAtTime(this._envelope.attackValue, t1);
-		
-		// レガシーブラウザ対応
-		gain.gain.setTargetAtTime = gain.gain.setTargetAtTime ||
-                              gain.gain.setTargetValueAtTime;
-		// Decay (Attackの最大値からSustainに衰退するまでの時間)
-		// Sustain 維持する音量(Gain.gain.value)
-		gain.gain.setTargetAtTime(this._envelope.sustain, t1, this._envelope.decay);
-		
+		eg.init();
+	
 
 		this.oscs.push({
 			note: noteId,
 			osc: osc,
-			gain: gain
+			eg: eg
 		});
 	}
 
@@ -182,18 +165,15 @@ class Audio {
 	 */
 	stopNote(noteId) {
 		// キーアップした音のoscを特定する
-		this.oscs.some((osc, i, oscs) => {
+		this.oscs.forEach((osc, i, oscs) => {
 			if (osc.note === noteId) {
 				// Release
-				const t3 = this.ctx.currentTime;
-				// AttackとDecayの処理をキャンセル
-				osc.gain.gain.cancelScheduledValues(t3);
-				osc.gain.gain.setTargetAtTime(0, t3, this._envelope.release);
-
+				osc.eg.release();
+				
 				// 0.001未満になったら音を止める
 				let intervalId;
 				intervalId = window.setInterval(function() {
-					if (osc.gain.gain.value < this.VALUE_OF_STOP) {
+					if (osc.eg.getNode().gain.value < this.VALUE_OF_STOP) {
 						osc.osc.stop();
 						// 配列から削除
           	oscs.splice(i, 1);
@@ -205,8 +185,6 @@ class Audio {
 					}
 				},0);
 
-				// breakの代わり
-				// return true;
 			}
 		});
 	}

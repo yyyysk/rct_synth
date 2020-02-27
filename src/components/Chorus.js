@@ -2,10 +2,6 @@ import React from 'react';
 
 class Chorus extends React.Component {
 
-	constructor(props) {
-		super(props);
-	}
-
 	onRangeChange(e) {
 		this.props.updateChorus(e.target.name, e.target.value);
 	}
