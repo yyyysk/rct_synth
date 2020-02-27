@@ -85,8 +85,23 @@ class Audio {
 		osc.type = this._wave;
 		osc.frequency.value = this.note[noteId];
 
+		// WAH
+		const lowpass = this.ctx.createBiquadFilter();
+		lowpass.type = (typeof lowpass.type === 'string') ? 'lowpass' : 0;
+		lowpass.frequency.value = 1000;
+		lowpass.Q.value = 20;
+		const maxCutoff = 6000;
+		const minCutoff = maxCutoff * 0.1;
+		const wahLFO = this.ctx.createOscillator();
+		const wahDepth = this.ctx.createGain();
+		wahLFO.connect(wahDepth);
+		wahDepth.connect(lowpass.frequency);
+		const wahDepthRate = 0.5;
+		wahDepth.gain.value = lowpass.frequency.value * wahDepthRate;
+		wahLFO.frequency.value = 1;
+
 		// EnvelopeFilter
-		const eg = new Envelope(this.ctx, this._envelope);
+		const eg = new Envelope(this.ctx, this._envelope, lowpass);
 
 		// Chorus
 		const chorus = new Chorus(this.ctx, this._chorus);
@@ -95,17 +110,19 @@ class Audio {
 		// Delay
 		const delay = new Delay(this.ctx, this._delay);
 		delay.init();
-		
+
+		// egに接続
+		osc.connect(eg.getNode());
+		// Wahに接続
+		eg.getNode.connect(lowpass);
 		// chorusへ接続
-		osc.connect(chorus.getNode());
+		lowpass.connect(chorus.getNode());
 		// chorusMixへ接続
 		chorus.getNode().connect(chorus.getNode_mix());
 		// Delayのdryへの接続
 		chorus.getNode_mix().connect(delay.getNode_dry());
-		// Enveloprgeneratorに接続
-		delay.getNode_dry().connect(eg.getNode());
 		// Dryを出力
-		eg.getNode().connect(this.ctx.destination);
+		delay.getNode_dry().connect(this.ctx.destination);
 
 		// ディレイEffect用の出力を接続
 		eg.getNode().connect(delay.getNode());
