@@ -1,4 +1,5 @@
 import Envelope from './envelope';
+import Delay from './delay';
 import Chorus from './chorus';
 
 /**
@@ -91,44 +92,30 @@ class Audio {
 		const chorus = new Chorus(this.ctx, this._chorus);
 		chorus.init();
 
-		/**
-		 * ========================
-		 * 				DELAY!!!!
-		 * =======================
-		 */
-		const MAX_DELAY_TIME = 2;
-		const delay = this.ctx.createDelay(MAX_DELAY_TIME);
-		const dry = this.ctx.createGain(); // 原音用
-		const wet = this.ctx.createGain(); // ディレイサウンド用
-		const feedback = this.ctx.createGain(); // FB用
-
-		// ディレイのパラメータ
-		delay.delayTime.value = this._delay.delayTime;
-		dry.gain.value = this._delay.dry;
-		wet.gain.value = this._delay.wet;
-		feedback.gain.value = this._delay.feedback;
-
+		// Delay
+		const delay = new Delay(this.ctx, this._delay);
+		delay.init();
+		
 		// chorusへ接続
 		osc.connect(chorus.getNode());
 		// chorusMixへ接続
 		chorus.getNode().connect(chorus.getNode_mix());
 		// Delayのdryへの接続
-		chorus.getNode_mix().connect(dry);
+		chorus.getNode_mix().connect(delay.getNode_dry());
 		// Enveloprgeneratorに接続
-		dry.connect(eg.getNode());
+		delay.getNode_dry().connect(eg.getNode());
 		// Dryを出力
 		eg.getNode().connect(this.ctx.destination);
 
 		// ディレイEffect用の出力を接続
-		eg.getNode().connect(delay);
-		delay.connect(wet);
-		wet.connect(this.ctx.destination);
+		eg.getNode().connect(delay.getNode());
+		delay.getNode().connect(delay.getNode_wet());
+		delay.getNode_wet().connect(this.ctx.destination);
 
 		// Feedbackを接続
-		delay.connect(feedback);
-		feedback.connect(delay);
+		delay.getNode().connect(delay.getNode_feedback());
+		delay.getNode_feedback().connect(delay.getNode());
 
-				
 		// start sound
 		osc.start(0);
 		// chorsu start
@@ -142,6 +129,7 @@ class Audio {
 			osc: osc,
 			eg: eg,
 			chorus: chorus,			
+			delay: delay,
 		});
 	}
 
@@ -156,20 +144,20 @@ class Audio {
 				osc.eg.release();
 				
 				// 0.001未満になったら音を止める
-				let intervalId;
-				intervalId = window.setInterval(function() {
-					if (osc.eg.getNode().gain.value < this.VALUE_OF_STOP) {
-						osc.osc.stop();
-						// 配列から削除
-          	const del = oscs.splice(i, 1);
-						del = null;
-
-						if (intervalId !== null) {
-							window.clearInterval(intervalId);
-							intervalId = null;
-						}
-					}
-				},0);
+//				let intervalId;
+//				intervalId = window.setInterval(function() {
+//					if (osc.eg.getNode().gain.value < this.VALUE_OF_STOP) {
+							osc.osc.stop();
+//						// 配列から削除
+	          	let del = oscs.splice(i, 1);
+							del = null;
+//
+//						if (intervalId !== null) {
+//							window.clearInterval(intervalId);
+//							intervalId = null;
+//						}
+//					}
+//				},0);
 
 			}
 		});
