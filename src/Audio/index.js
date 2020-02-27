@@ -7,7 +7,7 @@ import Chorus from './chorus';
  */
 class Audio {
 
-	constructor(envelope, delay, chorus) {
+	constructor(envelope, delay, chorus, wah) {
 		window.AudioContext = window.AudioContext || window.webkitAudioContext;
 		this.ctx = new AudioContext();
 		this.ctx.createGain = this.ctx.createGain || this.ctx.createGainNode;
@@ -44,6 +44,8 @@ class Audio {
 		this._delay = delay;
 		// Chorusのパラメータ
 		this._chorus = chorus;
+		// Wahのパラメータ
+		this._wah = wah;
 	}
 
 	/**
@@ -75,6 +77,13 @@ class Audio {
 	}
 
 	/**
+	 * Wahのセッター
+	 */
+	setWah(wah) {
+		this._wah = wah;
+	}
+
+	/**
 	 * 音鳴らす
 	 */
 	startNote(noteId) {
@@ -88,15 +97,15 @@ class Audio {
 		// WAH
 		const lowpass = this.ctx.createBiquadFilter();
 		lowpass.type = (typeof lowpass.type === 'string') ? 'lowpass' : 0;
-		lowpass.frequency.value = 2000;
-		lowpass.Q.value = 20;
+		lowpass.frequency.value = this._wah.cutoff;
+		lowpass.Q.value = this._wah.resonance;
 		const wahLFO = this.ctx.createOscillator();
 		const wahDepth = this.ctx.createGain();
 		wahLFO.connect(wahDepth);
 		wahDepth.connect(lowpass.frequency);
-		const wahDepthRate = 0.5;
+		const wahDepthRate = this._wah.rate;
 		wahDepth.gain.value = lowpass.frequency.value * wahDepthRate;
-		wahLFO.frequency.value = 2;
+		wahLFO.frequency.value = this._wah.lfo;
 
 		// EnvelopeFilter
 		const eg = new Envelope(this.ctx, this._envelope, lowpass);

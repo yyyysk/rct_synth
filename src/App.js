@@ -5,6 +5,7 @@ import EnvelopeFilter from './components/EnvelopeFilter';
 import Wave from './components/Wave';
 import Delay from './components/Delay';
 import Chorus from './components/Chorus';
+import Wah from './components/Wah';
 
 // Functions
 import { listen } from './Listner';
@@ -38,6 +39,13 @@ class App extends React.Component {
 				time: 0.020,
 				frequency: 0.05,
 				mix: 0.5,
+			},
+			// Wah
+			wah: {
+				cutoff: 2000,
+				resonance: 5,
+				rate: 0.5,
+				lfo: 2
 			}
 		};
 
@@ -45,7 +53,8 @@ class App extends React.Component {
 		this.audio = this.audio? this.audio : new Audio(
 			this.state.envelope,
 			this.state.delay,
-			this.state.chorus
+			this.state.chorus,
+			this.state.wah
 		);
 		if (!this.isListening) this.isListening = listen(this.audio);
 	}
@@ -99,6 +108,20 @@ class App extends React.Component {
 		);
 		this.setState({ chorus: newChorus });
 	}
+
+	/**
+	 * Wah更新
+	 */
+	_updateWah(name, value) {
+		const source = {};
+		source[name] = value;
+
+		const newWah = Object.assign(
+			this.state.wah,
+			source
+		);
+		this.setState({ wah: newWah });
+	}
 	
 	/**
 	 * Reactライフサイクル
@@ -109,6 +132,7 @@ class App extends React.Component {
 		this.audio.setEnvelope(this.state.envelope);
 		this.audio.setDelay(this.state.delay);
 		this.audio.setChorus(this.state.chorus);
+		this.audio.setWah(this.state.wah);
 	}
 
 	render() {
@@ -129,6 +153,10 @@ class App extends React.Component {
 				<Chorus
 					chorus={this.state.chorus}
 					updateChorus={(name, value) => this._updateChorus(name, value)} />
+
+				<Wah
+					wah={this.state.wah}
+					updateWah={(name, value) => this._updateWah(name, value)} />
 			</div>
 		);
 	}
