@@ -1,4 +1,5 @@
 import Envelope from './envelope';
+import Chorus from './chorus';
 
 /**
  * 音源の生成クラス
@@ -78,24 +79,17 @@ class Audio {
 	startNote(noteId) {
 		if (!noteId) return;
 
-		// オシレーター作る
+		// オシレーター
 		const osc = this.ctx.createOscillator();
-		// 波形
 		osc.type = this._wave;
 		osc.frequency.value = this.note[noteId];
 
-		// EnvelopeFilter用のGainNode
+		// EnvelopeFilter
 		const eg = new Envelope(this.ctx, this._envelope);
 
-		/**
-		 * =======================
-		 * 				CHORUS!!!
-		 * =======================
-		 */
-		const chorus = this.ctx.createDelay();
-		const chorusLFO = this.ctx.createOscillator();
-		const chorusDepth= this.ctx.createGain(); // LFO用のGainnode
-		const chorusMix = this.ctx.createGain();
+		// Chorus
+		const chorus = new Chorus(this.ctx, this._chorus);
+		chorus.init();
 
 		/**
 		 * ========================
@@ -115,11 +109,11 @@ class Audio {
 		feedback.gain.value = this._delay.feedback;
 
 		// chorusへ接続
-		osc.connect(chorus);
+		osc.connect(chorus.getNode());
 		// chorusMixへ接続
-		chorus.connect(chorusMix);
+		chorus.getNode().connect(chorus.getNode_mix());
 		// Delayのdryへの接続
-		chorusMix.connect(dry);
+		chorus.getNode_mix().connect(dry);
 		// Enveloprgeneratorに接続
 		dry.connect(eg.getNode());
 		// Dryを出力
@@ -134,21 +128,11 @@ class Audio {
 		delay.connect(feedback);
 		feedback.connect(delay);
 
-		// ChorusのLFOをdepthと接続
-		chorusLFO.connect(chorusDepth);
-		chorusDepth.connect(chorus.delayTime);
-		
-		// chorusのパラメータ
-		const depthRate = this._chorus.rate;
-		chorus.delayTime.value = this._chorus.time;
-		chorusDepth.gain.value = chorus.delayTime.value * depthRate;
-		chorusLFO.frequency.value = this._chorus.frequency;
-		chorusMix.gain.value = this._chorus.mix;
-
+				
 		// start sound
 		osc.start(0);
 		// chorsu start
-		chorusLFO.start(0);
+		chorus.getNode_LFO().start(0);
 
 		eg.init();
 	
@@ -156,7 +140,8 @@ class Audio {
 		this.oscs.push({
 			note: noteId,
 			osc: osc,
-			eg: eg
+			eg: eg,
+			chorus: chorus,			
 		});
 	}
 
@@ -176,7 +161,8 @@ class Audio {
 					if (osc.eg.getNode().gain.value < this.VALUE_OF_STOP) {
 						osc.osc.stop();
 						// 配列から削除
-          	oscs.splice(i, 1);
+          	const del = oscs.splice(i, 1);
+						del = null;
 
 						if (intervalId !== null) {
 							window.clearInterval(intervalId);
