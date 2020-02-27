@@ -88,17 +88,15 @@ class Audio {
 		// WAH
 		const lowpass = this.ctx.createBiquadFilter();
 		lowpass.type = (typeof lowpass.type === 'string') ? 'lowpass' : 0;
-		lowpass.frequency.value = 1000;
+		lowpass.frequency.value = 2000;
 		lowpass.Q.value = 20;
-		const maxCutoff = 6000;
-		const minCutoff = maxCutoff * 0.1;
 		const wahLFO = this.ctx.createOscillator();
 		const wahDepth = this.ctx.createGain();
 		wahLFO.connect(wahDepth);
 		wahDepth.connect(lowpass.frequency);
 		const wahDepthRate = 0.5;
 		wahDepth.gain.value = lowpass.frequency.value * wahDepthRate;
-		wahLFO.frequency.value = 1;
+		wahLFO.frequency.value = 2;
 
 		// EnvelopeFilter
 		const eg = new Envelope(this.ctx, this._envelope, lowpass);
@@ -114,7 +112,7 @@ class Audio {
 		// egに接続
 		osc.connect(eg.getNode());
 		// Wahに接続
-		eg.getNode.connect(lowpass);
+		eg.getNode().connect(lowpass);
 		// chorusへ接続
 		lowpass.connect(chorus.getNode());
 		// chorusMixへ接続
@@ -137,6 +135,8 @@ class Audio {
 		osc.start(0);
 		// chorsu start
 		chorus.getNode_LFO().start(0);
+		// wahstart
+		wahLFO.start(0);
 
 		eg.init();
 	
