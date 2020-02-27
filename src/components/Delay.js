@@ -2,10 +2,6 @@ import React from 'react';
 
 class Delay extends React.Component {
 
-	constructor(props) {
-		super(props);
-	}
-
 	onRangeChange(e) {
 		this.props.updateDelay(e.target.name, e.target.value);
 	}

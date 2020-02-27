@@ -2,10 +2,6 @@ import React from 'react';
 
 class EnvelopeFilter extends React.Component {
 
-	constructor(props) {
-		super(props);
-	}
-
 	onRangeChange(e) {
 		this.props.updateEnvelope(e.target.name, e.target.value);
 	}

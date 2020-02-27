@@ -2,10 +2,6 @@ import React from 'react';
 
 class Wave extends React.Component {
 
-	constructor(props) {
-		super(props);
-	}
-
 	onSelectChange(e) {
 		this.props.updateWave(e.target.value);
 	}

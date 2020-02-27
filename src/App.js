@@ -7,8 +7,8 @@ import Delay from './components/Delay';
 import Chorus from './components/Chorus';
 
 // Functions
-import { listen, reset } from './Listner';
-import Audio from './Audio';
+import { listen } from './Listner';
+import Audio from './Audio/index';
 
 class App extends React.Component {
 
