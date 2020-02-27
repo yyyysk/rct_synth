@@ -132,7 +132,7 @@ class Audio {
 		delay.getNode_dry().connect(this.ctx.destination);
 
 		// ディレイEffect用の出力を接続
-		eg.getNode().connect(delay.getNode());
+		lowpass.connect(delay.getNode());
 		delay.getNode().connect(delay.getNode_wet());
 		delay.getNode_wet().connect(this.ctx.destination);
 
