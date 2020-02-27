@@ -7,7 +7,7 @@ import Chorus from './chorus';
  */
 class Audio {
 
-	constructor(envelope, delay, chorus) {
+	constructor(envelope, delay, chorus, wah) {
 		window.AudioContext = window.AudioContext || window.webkitAudioContext;
 		this.ctx = new AudioContext();
 		this.ctx.createGain = this.ctx.createGain || this.ctx.createGainNode;
@@ -44,6 +44,8 @@ class Audio {
 		this._delay = delay;
 		// Chorusのパラメータ
 		this._chorus = chorus;
+		// Wahのパラメータ
+		this._wah = wah;
 	}
 
 	/**
@@ -75,6 +77,13 @@ class Audio {
 	}
 
 	/**
+	 * Wahのセッター
+	 */
+	setWah(wah) {
+		this._wah = wah;
+	}
+
+	/**
 	 * 音鳴らす
 	 */
 	startNote(noteId) {
@@ -85,8 +94,21 @@ class Audio {
 		osc.type = this._wave;
 		osc.frequency.value = this.note[noteId];
 
+		// WAH
+		const lowpass = this.ctx.createBiquadFilter();
+		lowpass.type = (typeof lowpass.type === 'string') ? 'lowpass' : 0;
+		lowpass.frequency.value = this._wah.cutoff;
+		lowpass.Q.value = this._wah.resonance;
+		const wahLFO = this.ctx.createOscillator();
+		const wahDepth = this.ctx.createGain();
+		wahLFO.connect(wahDepth);
+		wahDepth.connect(lowpass.frequency);
+		const wahDepthRate = this._wah.rate;
+		wahDepth.gain.value = lowpass.frequency.value * wahDepthRate;
+		wahLFO.frequency.value = this._wah.lfo;
+
 		// EnvelopeFilter
-		const eg = new Envelope(this.ctx, this._envelope);
+		const eg = new Envelope(this.ctx, this._envelope, lowpass);
 
 		// Chorus
 		const chorus = new Chorus(this.ctx, this._chorus);
@@ -95,17 +117,19 @@ class Audio {
 		// Delay
 		const delay = new Delay(this.ctx, this._delay);
 		delay.init();
-		
+
+		// egに接続
+		osc.connect(eg.getNode());
+		// Wahに接続
+		eg.getNode().connect(lowpass);
 		// chorusへ接続
-		osc.connect(chorus.getNode());
+		lowpass.connect(chorus.getNode());
 		// chorusMixへ接続
 		chorus.getNode().connect(chorus.getNode_mix());
 		// Delayのdryへの接続
 		chorus.getNode_mix().connect(delay.getNode_dry());
-		// Enveloprgeneratorに接続
-		delay.getNode_dry().connect(eg.getNode());
 		// Dryを出力
-		eg.getNode().connect(this.ctx.destination);
+		delay.getNode_dry().connect(this.ctx.destination);
 
 		// ディレイEffect用の出力を接続
 		eg.getNode().connect(delay.getNode());
@@ -120,6 +144,8 @@ class Audio {
 		osc.start(0);
 		// chorsu start
 		chorus.getNode_LFO().start(0);
+		// wahstart
+		wahLFO.start(0);
 
 		eg.init();
 	

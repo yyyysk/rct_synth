@@ -4,7 +4,7 @@ class Envelope {
 		this._ctx = ctx;
 		this._config = config;
 		this._eg = ctx.createGain();
-			}
+	}
 
 	/**
 	 * Envelopeを作成
