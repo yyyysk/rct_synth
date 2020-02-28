@@ -8,10 +8,10 @@ class Wah extends React.Component {
 
 	render() {
 		return(
-			<div>
-				<h3>Wah</h3>
+			<div className="nes-container with-title is-rounded manipulate__node">
+				<h3 className="title">Wah</h3>
 				<div>
-					<label htmlFor="cutoff">CUTOFF</label>
+					<label className="range-label" htmlFor="cutoff">CUTOFF</label>
 					<input 
 						id="cutoff" 
 						name="cutoff"
@@ -23,7 +23,7 @@ class Wah extends React.Component {
 						onChange={e => this.onRangeChange(e)} />
 				</div>
 				<div>
-					<label htmlFor="resonance">RESONANCE</label>
+					<label className="range-label" htmlFor="resonance">RESONANCE</label>
 					<input 
 						id="resonance" 
 						name="resonance"
@@ -35,7 +35,7 @@ class Wah extends React.Component {
 						onChange={e => this.onRangeChange(e)} />
 				</div>
 				<div>
-					<label htmlFor="wahRate">rate</label>
+					<label className="range-label" htmlFor="wahRate">rate</label>
 					<input 
 						id="wahRate" 
 						name="rate"
@@ -47,7 +47,7 @@ class Wah extends React.Component {
 						onChange={e => this.onRangeChange(e)} />
 				</div>
 				<div>
-					<label htmlFor="lfo">LFO</label>
+					<label className="range-label" htmlFor="lfo">LFO</label>
 					<input 
 						id="lfo" 
 						name="lfo"
