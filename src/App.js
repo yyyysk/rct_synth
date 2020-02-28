@@ -6,6 +6,7 @@ import Wave from './components/Wave';
 import Delay from './components/Delay';
 import Chorus from './components/Chorus';
 import Wah from './components/Wah';
+import Dialog from './components/Dialog';
 
 // Functions
 import { listen } from './Listner';
@@ -164,6 +165,7 @@ class App extends React.Component {
 								updateWah={(name, value) => this._updateWah(name, value)} />
 						</div>
 					</div>
+					<Dialog />
 				</div>
 			</div>
 		);

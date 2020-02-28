@@ -1,7 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import ScreenComp from './Screen';
 import './index.css';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+	<>
+		<ScreenComp />
+		<App />
+	</>, 
+	document.getElementById('root'));
 

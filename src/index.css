@@ -107,6 +107,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+background:linear-gradient(#F89174, #FFC778);
 }
 
 code {
@@ -120,6 +121,8 @@ code {
 .App {
 	width: 100%;
 	padding: 10px 50px;
+	background: #fff;
+	opacity: 0.8;
 }
 
 .manipulate {
@@ -146,4 +149,13 @@ code {
 .range-label {
 	display: inline-block;
 	width: 150px;
+}
+
+.confirm-btn {
+	display: block;
+	margin: 20px auto;
+}
+
+.screen {
+	height: 400px;
 }
