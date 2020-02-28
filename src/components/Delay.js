@@ -8,10 +8,10 @@ class Delay extends React.Component {
 
 	render() {
 		return(
-			<div>
-				<h3>DELAY</h3>
+			<div className="nes-container with-title is-rounded manipulate__node">
+				<h3 className="title">Delay</h3>
 				<div>
-					<label htmlFor="delayTime">延迟时间</label>
+					<label className="range-label" htmlFor="delayTime">TIME</label>
 					<input 
 						id="delayTime" 
 						name="delayTime"
@@ -23,7 +23,7 @@ class Delay extends React.Component {
 						onChange={e => this.onRangeChange(e)} />
 				</div>
 				<div>
-					<label htmlFor="delayDry">燥</label>
+					<label className="range-label" htmlFor="delayDry">DRY</label>
 					<input 
 						id="delayDry" 
 						name="dry"
@@ -35,7 +35,7 @@ class Delay extends React.Component {
 						onChange={e => this.onRangeChange(e)} />
 				</div>
 				<div>
-					<label htmlFor="delayWet">溼</label>
+					<label className="range-label" htmlFor="delayWet">WET</label>
 					<input 
 						id="delayWet" 
 						name="wet"
@@ -47,7 +47,7 @@ class Delay extends React.Component {
 						onChange={e => this.onRangeChange(e)} />
 				</div>
 				<div>
-					<label htmlFor="feedback">反馈</label>
+					<label className="range-label" htmlFor="feedback">FEEDBACK</label>
 					<input 
 						id="feedback" 
 						name="feedback"

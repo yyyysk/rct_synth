@@ -139,24 +139,32 @@ class App extends React.Component {
 		console.log(this.state);
 		return (
 			<div className="App">
-	
-				<Wave updateWave = {(wave) => this._updateWave(wave)} />
-	
-				<EnvelopeFilter 
-					updateEnvelope={(name, value) => this._updateEnvelope(name, value)} 
-					envelope={this.state.envelope}/>
-				
-				<Delay
-					delay={this.state.delay} 
-					updateDelay={(name, value) => this._updateDelay(name, value)} />
-
-				<Chorus
-					chorus={this.state.chorus}
-					updateChorus={(name, value) => this._updateChorus(name, value)} />
-
-				<Wah
-					wah={this.state.wah}
-					updateWah={(name, value) => this._updateWah(name, value)} />
+				<div className="nes-container with-title">
+					<p className="title">Create your sound.</p>
+					<Wave updateWave = {(wave) => this._updateWave(wave)} />
+					<div className="manipulate">
+						<div className="nodeWrapper">
+							<EnvelopeFilter 
+								updateEnvelope={(name, value) => this._updateEnvelope(name, value)} 
+								envelope={this.state.envelope}/>
+						</div>
+						<div className="nodeWrapper">
+							<Delay
+								delay={this.state.delay} 
+								updateDelay={(name, value) => this._updateDelay(name, value)} />
+						</div>
+						<div className="nodeWrapper">
+							<Chorus
+								chorus={this.state.chorus}
+								updateChorus={(name, value) => this._updateChorus(name, value)} />
+						</div>
+						<div className="nodeWrapper">							
+							<Wah
+								wah={this.state.wah}
+								updateWah={(name, value) => this._updateWah(name, value)} />
+						</div>
+					</div>
+				</div>
 			</div>
 		);
 	}

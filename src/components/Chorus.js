@@ -8,10 +8,10 @@ class Chorus extends React.Component {
 
 	render() {
 		return(
-			<div>
-				<h3>CHORUS</h3>
+			<div className="nes-container with-title is-rounded manipulate__node">
+				<h3 className="title">Chorus</h3>
 				<div>
-					<label htmlFor="chorusRate">率</label>
+					<label className="range-label" htmlFor="chorusRate">RATE</label>
 					<input 
 						id="chorusRate" 
 						name="rate"
@@ -23,7 +23,7 @@ class Chorus extends React.Component {
 						onChange={e => this.onRangeChange(e)} />
 				</div>
 				<div>
-					<label htmlFor="chorusTime">时间</label>
+					<label className="range-label" htmlFor="chorusTime">TIME</label>
 					<input 
 						id="chorusTime" 
 						name="time"
@@ -35,7 +35,7 @@ class Chorus extends React.Component {
 						onChange={e => this.onRangeChange(e)} />
 				</div>
 				<div>
-					<label htmlFor="chorusFrequency">频次</label>
+					<label className="range-label" htmlFor="chorusFrequency">FREQUENCY</label>
 					<input 
 						id="chorusFrequency" 
 						name="frequency"
@@ -47,7 +47,7 @@ class Chorus extends React.Component {
 						onChange={e => this.onRangeChange(e)} />
 				</div>
 				<div>
-					<label htmlFor="chorusMix">混合</label>
+					<label className="range-label" htmlFor="chorusMix">MIX</label>
 					<input 
 						id="chorusMix" 
 						name="mix"

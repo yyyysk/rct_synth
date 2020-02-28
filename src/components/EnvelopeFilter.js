@@ -8,10 +8,11 @@ class EnvelopeFilter extends React.Component {
 
 	render() {
 		return (
-			<div>
+			<div className="nes-container with-title is-rounded manipulate__node">
+				<h3 className="title">Envelope</h3>
 				{ /** attack time  */ }
 				<div>
-					<label htmlFor="attackTime">攻击时间</label>
+					<label className="range-label" htmlFor="attackTime">ATTACK</label>
 					<input 
 						id="attackTime" 
 						name="attackTime"
@@ -25,7 +26,7 @@ class EnvelopeFilter extends React.Component {
 
 				{/** attack value */ }
 				<div>
-					<label htmlFor="attackValue">攻击值</label>
+					<label className="range-label" htmlFor="attackValue">GAIN</label>
 					<input 
 						id="attackValue" 
 						name="attackValue"
@@ -39,7 +40,7 @@ class EnvelopeFilter extends React.Component {
 
 				{ /** decay time */}
 				<div>
-					<label htmlFor="decay">衰减</label>
+					<label className="range-label" htmlFor="decay">DECAY</label>
 					<input 
 						id="decay" 
 						name="decay"
@@ -53,7 +54,7 @@ class EnvelopeFilter extends React.Component {
 
 				{ /** sustain value */ }
 				<div>
-					<label htmlFor="sustain">支持</label>
+					<label className="range-label" htmlFor="sustain">SUSTAIN</label>
 					<input 
 						id="sustain" 
 						name="sustain"
@@ -67,7 +68,7 @@ class EnvelopeFilter extends React.Component {
 
 				{ /** release */}
 				<div>
-					<label htmlFor="release">发布</label>
+					<label className="range-label" htmlFor="release">RELEASE</label>
 					<input 
 						id="release" 
 						name="release"
