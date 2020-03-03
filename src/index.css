@@ -107,7 +107,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-background:linear-gradient(#F89174, #FFC778);
+/*background:linear-gradient(#F89174, #FFC778);*/
 }
 
 code {
