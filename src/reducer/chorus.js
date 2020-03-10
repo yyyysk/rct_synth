@@ -12,6 +12,15 @@ const chorusHandler = (state = initialState, action) => {
 		case UPDATE_CHORUS:
 			return {
 				...state,
-				modalOpenFlag: true,
-				modalType: action.payload.modalType
+				rate: action.payload.rate,
+				time: action.payload.time,
+				frequency: action.payload.frequency,
+				mix: action.payload.mix
 			};
+
+		default: return state;
+	}
+};
+
+export default chorusHandler;
+
