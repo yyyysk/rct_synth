@@ -19,7 +19,7 @@ class Delay extends React.Component {
 						max="2" 
 						min="0" 
 						step="0.1" 
-						value={this.props.delay.delayTime}
+						// value={this.props.delay.delayTime}
 						onChange={e => this.onRangeChange(e)} />
 				</div>
 				<div>
@@ -31,7 +31,7 @@ class Delay extends React.Component {
 						max="1" 
 						min="0" 
 						step="0.1" 
-						value={this.props.delay.dry}
+						// value={this.props.delay.dry}
 						onChange={e => this.onRangeChange(e)} />
 				</div>
 				<div>
@@ -43,7 +43,7 @@ class Delay extends React.Component {
 						max="1" 
 						min="0" 
 						step="0.1" 
-						value={this.props.delay.wet}
+						// value={this.props.delay.wet}
 						onChange={e => this.onRangeChange(e)} />
 				</div>
 				<div>
@@ -55,7 +55,7 @@ class Delay extends React.Component {
 						max="1" 
 						min="0" 
 						step="0.1" 
-						value={this.props.delay.feedback}
+						// value={this.props.delay.feedback}
 						onChange={e => this.onRangeChange(e)} />
 				</div>
 			</div>

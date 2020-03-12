@@ -20,7 +20,7 @@ class EnvelopeFilter extends React.Component {
 						max="3" 
 						min="0" 
 						step="0.1" 
-						value={this.props.envelope.attackTime}
+						// value={this.props.envelope.attackTime}
 						onChange={e => this.onRangeChange(e)} />
 				</div>
 
@@ -34,7 +34,7 @@ class EnvelopeFilter extends React.Component {
 						max="1" 
 						min="0" 
 						step="0.1" 
-						value={this.props.envelope.attackValue} 
+						// value={this.props.envelope.attackValue} 
 						onChange={e => this.onRangeChange(e)} />
 				</div>
 
@@ -48,7 +48,7 @@ class EnvelopeFilter extends React.Component {
 						max="1" 
 						min="0" 
 						step="0.1" 
-						value={this.props.envelope.decay}
+						// value={this.props.envelope.decay}
 						onChange={e => this.onRangeChange(e)} />
 				</div>
 
@@ -62,7 +62,7 @@ class EnvelopeFilter extends React.Component {
 						max="1" 
 						min="0" 
 						step="0.1" 
-						value={this.props.envelope.sustain}
+						// value={this.props.envelope.sustain}
 						onChange={e => this.onRangeChange(e)}/>
 				</div>
 
@@ -76,7 +76,7 @@ class EnvelopeFilter extends React.Component {
 						max="1" 
 						min="0" 
 						step="0.1" 
-						value={this.props.envelope.release}
+						// value={this.props.envelope.release}
 						onChange={e => this.onRangeChange(e)}/>
 				</div>
 

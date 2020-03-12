@@ -1,9 +1,9 @@
 import { UPDATE_ENVELOPE } from '../actionTypes';
 
-export const udpateEnvelope = (attackTime, attackValue, decay, sustain, release) => {
+export const updateEnvelope = (attackTime, attackValue, decay, sustain, release) => {
 
 	return({
-		type: UPDATE_CHORUS,
+		type: UPDATE_ENVELOPE,
 		payload: {
 			attackTime,
 			attackValue,

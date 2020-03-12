@@ -7,10 +7,10 @@ const initialState = {
 	feedback: 0,
 };
 
-const envelopeHandler = (state = initialState, action) => {
+const delayHandler = (state = initialState, action) => {
 	
 	switch(action.type) {
-		case UPDATE_ENVELOPE:
+		case UPDATE_DELAY:
 			return {
 				...state,
 				delayTime: action.payload.delayTime,
@@ -24,5 +24,5 @@ const envelopeHandler = (state = initialState, action) => {
 	}
 }
 
-export default envelopeHandler;
+export default delayHandler;
 

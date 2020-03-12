@@ -3,9 +3,9 @@ import { UPDATE_DELAY } from '../actionTypes';
 export const updateDelay = (delayTime, dry, wet, feedback) => {
 
 	return({
-		type: UPDATE_CHORUS,
+		type: UPDATE_DELAY,
 		payload: {
-			delaytime,
+			delayTime,
 			dry,
 			wet,
 			feedback

@@ -9,7 +9,7 @@ const waveHandler = (state = initialState, action) => {
 		case UPDATE_WAVE:
 			return {
 				...state,
-				wave: action.payload.wave;
+				wave: action.payload.wave
 			};
 
 		default: return state;

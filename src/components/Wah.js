@@ -19,7 +19,7 @@ class Wah extends React.Component {
 						max="10000" 
 						min="0" 
 						step="100" 
-						value={this.props.wah.cutoff}
+						// value={this.props.wah.cutoff}
 						onChange={e => this.onRangeChange(e)} />
 				</div>
 				<div>
@@ -31,7 +31,7 @@ class Wah extends React.Component {
 						max="20" 
 						min="0" 
 						step="1" 
-						value={this.props.wah.resonance}
+						// value={this.props.wah.resonance}
 						onChange={e => this.onRangeChange(e)} />
 				</div>
 				<div>
@@ -43,7 +43,7 @@ class Wah extends React.Component {
 						max="1" 
 						min="0" 
 						step="0.1" 
-						value={this.props.wah.rate}
+						// value={this.props.wah.rate}
 						onChange={e => this.onRangeChange(e)} />
 				</div>
 				<div>
@@ -55,7 +55,7 @@ class Wah extends React.Component {
 						max="10" 
 						min="0" 
 						step="0.1" 
-						value={this.props.wah.lfo}
+						// value={this.props.wah.lfo}
 						onChange={e => this.onRangeChange(e)} />
 				</div>
 			</div>
