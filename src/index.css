@@ -179,3 +179,9 @@ code {
 	display: block;
 	margin: 20px auto;
 }
+
+.patches-btn {
+	position: absolute;
+	bottom: 20px;
+	right: 140px;
+}

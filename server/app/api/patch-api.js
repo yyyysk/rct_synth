@@ -15,7 +15,7 @@ exports.create = (req, res, next) => {
  * ページング
  */
 exports.getAll = (req, res, next) => {
-	const page = req.body.page;
+	const page = req.query.page;
 	repo.getAll(page)
 		.then(patches => res.json({ result: patches }))
 		.cathc(err => console.error(err));

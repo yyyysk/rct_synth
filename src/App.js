@@ -8,6 +8,7 @@ import Chorus from './containers/Chorus';
 import Wah from './containers/Wah';
 import Dialog from './components/Dialog';
 import Save from './components/Save';
+import PatchList from './components/PatchList';
 
 // Functions
 import { listen } from './Listner';
@@ -61,6 +62,7 @@ class App extends React.Component {
 					</div>
 					<Dialog />
 					<Save store={this.props} />
+					<PatchList />
 				</div>
 			</div>
 		);

@@ -7,6 +7,12 @@ const Save = (props) => {
 	const [msg, setMsg] = useState('');
 
 	const onBtn = () => {
+		// init
+		setErrMsg('');
+		setMsg('');
+		document.getElementById('save-author').value = '';
+		document.getElementById('save-name').value = '';
+
 		const trg = document.getElementById('save-default');
 		if (trg) trg.showModal();
 	}
@@ -28,7 +34,10 @@ const Save = (props) => {
 		}).then(data => {
 			console.log(data);		
 			setMsg('The patch has been created. Press "cancel" to close.');
-		}).catch(err => console.error(err));
+
+			const trg = document.getElementById('save-default');
+			if (trg) trg.close();
+		}).catch(err => setErrMsg(err));
 	}
 
 	return (
