@@ -21,3 +21,13 @@ exports.getAll = (req, res, next) => {
 		.catch(err => console.error(err));
 };
 
+/**
+ * Patch取得
+ */
+exports.getOne = (req, res, next) => {
+	const id = req.params.id;
+	repo.getOne(id)
+		.then(patch = res.json({ result: patch}))
+		.catch(err => console.error(err));
+};
+

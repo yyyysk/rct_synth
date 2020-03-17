@@ -7,9 +7,11 @@ const PatchList = () => {
 	const [pageNum, setPageNum] = useState(0);
 	const [patches, setPatches] = useState([]);
 
+	/**
+	 * modal open
+	 */
 	const onBtn = () => {
 		const url = `${GET_LIST_URL}?page=${pageNum}`;
-		console.log(url);
 		getData(url)
 			.then(result => {
 				console.log(result);
@@ -22,15 +24,31 @@ const PatchList = () => {
 		if (trg) trg.showModal();
 	};
 
+	/**
+	 * load click
+	 */
+	const onLoad = (e) => {
+		const id = e.target.id;
+		const url = `${GET_LIST_URL}/${id}`;
+		getData(url)
+			.then(result => {
+				console.log(result);
+			})
+			.catch(err => console.error(err));
+	};
+
+	/**
+	 * generate patch list
+	 */
 	const generateList = () => {
 		console.log(patches);
 		if (!patches.length) return <></>;
 		const list = patches.map((el, i) => {
 			return (
-				<li>
-					<h3>el.name</h3>
-					<p>el.author</p>
-					<button type="button" class="nes-btn is-warning">Load</button>
+				<li className="patch-list">
+					<h3 className="patch-list__name">{el.name}</h3>
+					<p className="patch-list__author" >{el.author}</p>
+					<button id={el.id} type="button" class="nes-btn is-warning" onClick={() => onLoad()}>Load</button>
 				</li>
 			);
 		});
@@ -46,7 +64,7 @@ const PatchList = () => {
 		      <p className="title">Patches</p>
 					{ generateList() }
 		      <menu className="dialog-menu">
-		        <button className="nes-btn is-primary confirm-btn">Confirm</button>
+		        <button className="nes-btn is-primary confirm-btn">Close</button>
 		      </menu>
 		    </form>
 		  </dialog>

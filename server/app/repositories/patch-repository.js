@@ -32,8 +32,19 @@ class PatchRepository {
 				.then(patches => resolve(patches))
 				.catch(err => console.log(err));
 		});
-	}
+	};
 
+	/**
+   * IDからPatch取得
+   * @param {string} id
+   */
+  findOne(id) {
+    return new Promise((resolve, reject) => {
+      patch.findOne({ where: {id: id}})
+      .then(patch => resolve(patch))
+      .catch(err => console.error(err));
+    })
+  };
 }
 
 module.exports = PatchRepository;

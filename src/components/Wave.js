@@ -15,7 +15,7 @@ const Wave = (props) => {
 			</div>
 		</div>
 	);
-}
+};
 
 export default Wave;
 
