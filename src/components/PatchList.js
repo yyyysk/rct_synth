@@ -13,7 +13,8 @@ const PatchList = () => {
 		getData(url)
 			.then(result => {
 				console.log(result);
-				generateList(result);
+				// 再render -> generateList()ってなる
+				setPatches(result);
 			})
 			.catch(err => console.error(err));
 		
