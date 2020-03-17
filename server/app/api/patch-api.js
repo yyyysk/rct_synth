@@ -18,6 +18,6 @@ exports.getAll = (req, res, next) => {
 	const page = req.query.page;
 	repo.getAll(page)
 		.then(patches => res.json({ result: patches }))
-		.cathc(err => console.error(err));
+		.catch(err => console.error(err));
 };
 
