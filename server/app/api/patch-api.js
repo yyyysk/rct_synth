@@ -5,8 +5,8 @@ const repo = new repository();
  * patch 作成
  */
 exports.create = (req, res, next) => {
-	console.log(req);
-	repo.create()
+	const data = req.body;
+	repo.create(data)
 		.then(patch => res.json({ result: patch }))
 		.catch(err => console.error(err));
 };
