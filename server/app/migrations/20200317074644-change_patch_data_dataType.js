@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-		return queryInterface('patches', 'data', { dataType: Sequelize.STRING(2048) }); 
+		return queryInterface.changeColumn('patches', 'data', { dataType: Sequelize.STRING(2048) }); 
   },
 
   down: (queryInterface, Sequelize) => {
