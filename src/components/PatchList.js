@@ -14,7 +14,7 @@ const PatchList = () => {
 			.then(result => {
 				console.log(result);
 				// 再render -> generateList()ってなる
-				setPatches(result);
+				setPatches(result.result);
 			})
 			.catch(err => console.error(err));
 		
