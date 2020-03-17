@@ -2,7 +2,8 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-		return queryInterface.changeColumn('patches', 'data', { dataType: Sequelize.TEXT }); 
+		return queryInterface.changeColumn(
+			'patches', 'data', { type: Sequelize.TEXT }); 
   },
 
   down: (queryInterface, Sequelize) => {
