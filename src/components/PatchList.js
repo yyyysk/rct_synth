@@ -48,7 +48,7 @@ const PatchList = () => {
 				<li className="patch-list">
 					<h3 className="patch-list__name">{el.name}</h3>
 					<p className="patch-list__author" >{el.author}</p>
-					<button id={el.id} type="button" class="nes-btn is-warning" onClick={() => onLoad()}>Load</button>
+					<button id={el.id} type="button" class="nes-btn is-warning" onClick={(e) => onLoad(e)}>Load</button>
 				</li>
 			);
 		});
