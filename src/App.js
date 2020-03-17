@@ -7,6 +7,7 @@ import Delay from './containers/Delay';
 import Chorus from './containers/Chorus';
 import Wah from './containers/Wah';
 import Dialog from './components/Dialog';
+import Save from './components/Save';
 
 // Functions
 import { listen } from './Listner';
@@ -59,6 +60,7 @@ class App extends React.Component {
 						</div>
 					</div>
 					<Dialog />
+					<Save />
 				</div>
 			</div>
 		);
