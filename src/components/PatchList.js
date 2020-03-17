@@ -23,6 +23,7 @@ const PatchList = () => {
 	};
 
 	const generateList = () => {
+		if (!patches.length) return <></>;
 		const list = patches.map((el, i) => {
 			return (
 				<li>
