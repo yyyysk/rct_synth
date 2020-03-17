@@ -39,7 +39,7 @@ class App extends React.Component {
 	}
 
 	render() {
-		console.log(this.props);
+
 		return (
 			<div className="App">
 				<div className="nes-container with-title">
@@ -60,7 +60,7 @@ class App extends React.Component {
 						</div>
 					</div>
 					<Dialog />
-					<Save />
+					<Save store={this.props} />
 				</div>
 			</div>
 		);
