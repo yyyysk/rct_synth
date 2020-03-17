@@ -159,3 +159,23 @@ code {
 .screen {
 	height: 400px;
 }
+
+.save-btn {
+	position: absolute;
+	bottom: 20px;
+	right: 20px;
+}
+.save__title {
+	margin-bottom: 20px;
+}
+.save__input {
+	margin-top: 10px;
+}
+.save__actions {
+	display: flex;
+
+}
+.save__save-btn {
+	display: block;
+	margin: 20px auto;
+}

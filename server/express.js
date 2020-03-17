@@ -1,9 +1,11 @@
 const express = require('express');
 const app = express();
+const router = require('./app/api/index');
 
 app.use(express.static('build'));
 
 app.use('/', express.static(__dirname + '/build'));
+app.use('/api', router);
 
 app.use((req, res, next) =>  {
   next(createError(404));
