@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
 	},
     name: DataTypes.STRING,
     author: DataTypes.STRING,
-    data: DataTypes.STRING(2048)
+    data: DataTypes.TEXT
   }, {
     underscored: true,
   });
