@@ -19,6 +19,8 @@ exports.getAll = (req, res, next) => {
 	repo.getAll(page)
 		.then(patches => res.json({ result: patches }))
 		.catch(err => console.error(err));
+
+	next();
 };
 
 /**
