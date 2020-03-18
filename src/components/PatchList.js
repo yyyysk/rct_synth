@@ -12,10 +12,10 @@ const PatchList = (props) => {
 	 */
 	const setNewPatch = (patch) => {
 		console.log(patch);
-		props.updateChorus(patch.chorus.rate, patch.chorus.time, patch.chorus.frequency, patch.chorus.mix);
-		props.updateDelay(patch.delay.delayTime, patch.delay.dry, patch.delay.wet, patch.delay.feedback);
-		props.updateEnvelope(patch.envelope.value, patch.envelope.attackValue, patch.envelope.decay, patch.envelope.sustain, patch.envelope.release);
-		props.updateWah(patch.wah.cutoff, patch.wah.resonance, patch.wah.rate, patch.wah.lfo);
+		props.updateChorus(patch.chorus.rate.toString(), patch.chorus.time.toString(), patch.chorus.frequency.toString(), patch.chorus.mix.toString());
+		props.updateDelay(patch.delay.delayTime.toString(), patch.delay.dry.toString(), patch.delay.wet.toString(), patch.delay.feedback.toString());
+		props.updateEnvelope(patch.envelope.value.toString(), patch.envelope.attackValue.toString(), patch.envelope.decay.toString(), patch.envelope.sustain.toString(), patch.envelope.release.toString());
+		props.updateWah(patch.wah.cutoff.toString(), patch.wah.resonance.toString(), patch.wah.rate.toString(), patch.wah.lfo.toString());
 		props.updateWave(patch.wave);
 	};
 
