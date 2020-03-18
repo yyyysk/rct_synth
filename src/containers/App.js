@@ -10,7 +10,7 @@ const mapStateToProps = (state) =>  {
 		envelope: state.envelopeHandler,
 		wah: state.wahHandler,
 	};
-}
+};
 
 export default connect(mapStateToProps)(App);
 

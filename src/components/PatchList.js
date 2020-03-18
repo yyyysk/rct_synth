@@ -1,11 +1,22 @@
 import React, { useState } from 'react';
 import { getData } from '../util/httpUtils';
 
-const PatchList = () => {
+const PatchList = (props) => {
 
 	const GET_LIST_URL = '/api/v1/patch/get'; 
 	const [pageNum, setPageNum] = useState(0);
 	const [patches, setPatches] = useState([]);
+
+	/**
+	 * Update patch
+	 */
+	const setNewPatch = (patch) => {
+		props.updateChorus(patch.chorus.rate, patch.chorus.time, patch.chorus.frequency, patch.chorus.mix);
+		props.updateDelay(patch.delay.delayTime, patch.delay.dry, patch.delay.wet, patch.delay.feedback);
+		props.updateEnvelope(patch.envelope.value, patch.envelope.attackValue, patch.envelope.decay, patch.envelope.sustain, patch.envelope.release);
+		props.updateWah(patch.wah.cutoff, patch.wah.resonance, patch.wah.rate, patch.wah.lfo);
+		props.updateWave(patch.wave);
+	};
 
 	/**
 	 * modal open
@@ -14,7 +25,6 @@ const PatchList = () => {
 		const url = `${GET_LIST_URL}?page=${pageNum}`;
 		getData(url)
 			.then(result => {
-				console.log(result);
 				// 再render -> generateList()ってなる
 				setPatches(result.result);
 			})
@@ -32,7 +42,7 @@ const PatchList = () => {
 		const url = `${GET_LIST_URL}/${id}`;
 		getData(url)
 			.then(result => {
-				console.log(result);
+				setNewPatch(result.result[0]);
 			})
 			.catch(err => console.error(err));
 	};
@@ -41,8 +51,8 @@ const PatchList = () => {
 	 * generate patch list
 	 */
 	const generateList = () => {
-		console.log(patches);
 		if (!patches.length) return <></>;
+
 		const list = patches.map((el, i) => {
 			return (
 				<li className="patch-list">
@@ -52,6 +62,13 @@ const PatchList = () => {
 				</li>
 			);
 		});
+		list.unshift(
+			<li className="patch-list">
+					<h3 className="patch-list__name">Patch's title</h3>
+					<p className="patch-list__author" >Author</p>
+					<p></p>
+				</li>
+		);
 
 		return <ul>{list}</ul>;
 	};

@@ -8,7 +8,7 @@ import Chorus from './containers/Chorus';
 import Wah from './containers/Wah';
 import Dialog from './components/Dialog';
 import Save from './components/Save';
-import PatchList from './components/PatchList';
+import PatchList from './containers/PatchList';
 
 // Functions
 import { listen } from './Listner';

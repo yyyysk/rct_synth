@@ -1,7 +1,6 @@
 import React from 'react';
 
 const EnvelopeFilter = (props) => {
-	console.log(props);
 
 	return (
 		<div className="nes-container with-title is-rounded manipulate__node">
