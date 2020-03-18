@@ -113,6 +113,7 @@ const PatchList = (props) => {
 					{ generateList() }
 					<div className="paginator">
 						<div className="paginator__prev"><a onClick={(e) => onPrev(e)}>prev</a></div>
+						<div>{pageNum}</div>
 						<div className="paginator__next"><a onClick={(e) => onNext(e)}>next</a></div>
 					</div>
 		      <menu className="dialog-menu">
