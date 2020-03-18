@@ -44,7 +44,10 @@ const PatchList = (props) => {
 		getData(url)
 			.then(result => {
 				console.log(result);
-				setNewPatch(result.result[0]);
+				const data = result.result[0].data;
+				if (!data) return;
+				const parsedData = JSON.parse(data);
+				setNewPatch(parsedData);
 			})
 			.catch(err => console.error(err));
 	};
