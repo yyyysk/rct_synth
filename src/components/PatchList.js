@@ -11,6 +11,7 @@ const PatchList = (props) => {
 	 * Update patch
 	 */
 	const setNewPatch = (patch) => {
+		console.log(patch);
 		props.updateChorus(patch.chorus.rate, patch.chorus.time, patch.chorus.frequency, patch.chorus.mix);
 		props.updateDelay(patch.delay.delayTime, patch.delay.dry, patch.delay.wet, patch.delay.feedback);
 		props.updateEnvelope(patch.envelope.value, patch.envelope.attackValue, patch.envelope.decay, patch.envelope.sustain, patch.envelope.release);
@@ -42,6 +43,7 @@ const PatchList = (props) => {
 		const url = `${GET_LIST_URL}/${id}`;
 		getData(url)
 			.then(result => {
+				console.log(result);
 				setNewPatch(result.result[0]);
 			})
 			.catch(err => console.error(err));
