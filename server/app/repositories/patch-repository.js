@@ -40,9 +40,9 @@ class PatchRepository {
    */
   getOne(id) {
     return new Promise((resolve, reject) => {
-      patch.findOne({ where: {id: id}})
-      .then(patch => resolve(patch))
-      .catch(err => console.error(err));
+      patch.findAll({ where: {id: id}})
+				.then(patch => resolve(patch))
+				.catch(err => console.error(err));
     })
   };
 }
