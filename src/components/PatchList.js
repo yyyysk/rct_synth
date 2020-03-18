@@ -4,7 +4,7 @@ import { getData } from '../util/httpUtils';
 const PatchList = (props) => {
 
 	const GET_LIST_URL = '/api/v1/patch/get'; 
-	const [pageNum, setPageNum] = useState(0);
+	const [pageNum, setPageNum] = useState(1);
 	const [patches, setPatches] = useState([]);
 
 	/**
@@ -46,7 +46,7 @@ const PatchList = (props) => {
 	 */
 	const onPrev = e => {
 		e.preventDefault();
-		if (pageNum > 0) {
+		if (pageNum > 1) {
 			setPageNum(pageNum-1);
 			loadList();
 		}
