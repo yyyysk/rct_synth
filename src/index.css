@@ -190,4 +190,43 @@ code {
 	display: flex;
 	justify-content: space-evenly;
 	list-style: none;
+	width: 500px;
+}
+
+.patch-list__spacer {
+	width: 88px;
+}
+
+.patch-list__name {
+	width: 206px;
+	text-overflow: ellipsis;
+}
+
+.patch-list__author {
+	width: 206px;
+	text-overflow: ellipsis;
+}
+
+.paginator {
+	width: 400px;
+	display: flex;
+	margin: 20px auto;
+	justify-content: space-between;
+}
+
+.paginator__prev {
+	font-weight: 600;
+}
+
+.paginator__prev>a {
+	text-decoration: none;
+	color: black;
+}
+.paginator__next {
+	font-weight: 600;
+}
+
+.paginator__next>a {
+	text-decoration: none;
+	color: black;
 }

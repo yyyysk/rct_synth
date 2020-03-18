@@ -20,9 +20,9 @@ const PatchList = (props) => {
 	};
 
 	/**
-	 * modal open
+	 * リスト読み込み
 	 */
-	const onBtn = () => {
+	const loadList = () => {
 		const url = `${GET_LIST_URL}?page=${pageNum}`;
 		getData(url)
 			.then(result => {
@@ -30,9 +30,35 @@ const PatchList = (props) => {
 				setPatches(result.result);
 			})
 			.catch(err => console.error(err));
-		
+	};
+
+	/**
+	 * modal open
+	 */
+	const onBtn = () => {
+		loadList();		
 		const trg = document.getElementById('dialog-patches');
 		if (trg) trg.showModal();
+	};
+
+	/**
+	 * prev click
+	 */
+	const onPrev = e => {
+		e.preventDefault();
+		if (pageNum > 0) {
+			setPageNum(pageNum-1);
+			loadList();
+		}
+	};
+
+	/**
+	 * next click
+	 */
+	const onNext = e => {
+		e.preventDefault();
+		setPageNum(pageNum+1);
+		loadList();
 	};
 
 	/**
@@ -69,9 +95,9 @@ const PatchList = (props) => {
 		});
 		list.unshift(
 			<li className="patch-list">
-					<h3 className="patch-list__name">Patch's title</h3>
+					<h3 className="patch-list__name">title</h3>
 					<p className="patch-list__author" >Author</p>
-					<p></p>
+					<p className="patch-list__spacer"></p>
 				</li>
 		);
 
@@ -85,6 +111,10 @@ const PatchList = (props) => {
 		    <form method="dialog">
 		      <p className="title">Patches</p>
 					{ generateList() }
+					<div className="paginator">
+						<div className="paginator__prev"><a onClick={(e) => onPrev(e)}>prev</a></div>
+						<div className="paginator__next"><a onClick={(e) => onNext(e)}>next</a></div>
+					</div>
 		      <menu className="dialog-menu">
 		        <button className="nes-btn is-primary confirm-btn">Close</button>
 		      </menu>
