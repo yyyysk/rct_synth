@@ -38,8 +38,7 @@ class PatchRepository {
    * IDからPatch取得
    * @param {string} id
    */
-  findOne(id) {
-		console.log('erpo', id);
+  getOne(id) {
     return new Promise((resolve, reject) => {
       patch.findOne({ where: {id: id}})
       .then(patch => resolve(patch))
