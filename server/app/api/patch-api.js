@@ -26,6 +26,7 @@ exports.getAll = (req, res, next) => {
  */
 exports.getOne = (req, res, next) => {
 	const id = req.params.id;
+	console.log('patch getone', id);
 	repo.getOne(id)
 		.then(patch = res.json({ result: patch}))
 		.catch(err => console.error(err));
